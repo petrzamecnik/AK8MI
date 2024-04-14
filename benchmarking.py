@@ -21,20 +21,30 @@ def Schweffel(x):
 
 
 # Main Functions
-def random_search(test_function, iterations, bounds, dimension):
-    random_solution = np.random.uniform(*bounds, dimension)
-    _best_solution = random_solution
-    _best_value = np.inf
+def random_search(_test_function, _iterations, _bounds, _dimension):
+    def generate_random_solution(_bounds, _dimension):
+        while True:
+            solution = np.random.uniform(*_bounds, _dimension)
+            if np.all(_bounds[0] <= solution) and np.all(solution <= _bounds[1]):
+                return solution
 
-    for i in range(iterations):
-        random_solution = np.random.uniform(*bounds, dimension)
-        value = test_function(random_solution)
+    random_solution = generate_random_solution(_bounds, _dimension)
+    _best_solution = random_solution
+    _best_value = _test_function(_best_solution)
+
+    for _ in range(_iterations - 1):
+        random_solution = generate_random_solution(_bounds, _dimension)
+        value = _test_function(random_solution)
 
         if value < _best_value:
             _best_value = value
             _best_solution = random_solution
 
     return _best_solution, _best_value
+
+
+def simulated_annealing(_test_function, _iterations, _bounds, _dimension, _temp_start, _temp_end):
+    return NotImplemented
 
 
 # Configuration
