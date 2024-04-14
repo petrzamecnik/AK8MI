@@ -1,4 +1,6 @@
 import numpy as np
+import pprint
+import matplotlib.pyplot as plt
 
 
 # Test Functions
@@ -21,26 +23,28 @@ def Schweffel(x):
 
 
 # Main Functions
-def random_search(_test_function, _iterations, _bounds, _dimension):
+def random_search(test_function, iterations, bounds, dimension):
     def generate_random_solution(_bounds, _dimension):
         while True:
             solution = np.random.uniform(*_bounds, _dimension)
             if np.all(_bounds[0] <= solution) and np.all(solution <= _bounds[1]):
                 return solution
 
-    random_solution = generate_random_solution(_bounds, _dimension)
-    _best_solution = random_solution
-    _best_value = _test_function(_best_solution)
+    random_solution = generate_random_solution(bounds, dimension)
+    best_solution = random_solution
+    best_value = test_function(best_solution)
+    best_values = [best_value]
 
-    for _ in range(_iterations - 1):
-        random_solution = generate_random_solution(_bounds, _dimension)
-        value = _test_function(random_solution)
+    for i in range(iterations - 1):
+        random_solution = generate_random_solution(bounds, dimension)
+        value = test_function(random_solution)
+        best_values.append(value)
 
-        if value < _best_value:
-            _best_value = value
-            _best_solution = random_solution
+        if value < best_value:
+            best_value = value
+            best_solution = random_solution
 
-    return _best_solution, _best_value
+    return best_solution, best_value, best_values
 
 
 def simulated_annealing(_test_function, _iterations, _bounds, _dimension, _temp_start, _temp_end):
@@ -52,6 +56,7 @@ bounds_dejong = (-5, 5)
 bounds_schweffel = (-500, 500)
 
 # Implementations
-best_solution, best_value = random_search(dejong1, 100, bounds_dejong, 5)
-print("best_solution:", best_solution)
-print("best_value:", best_value)
+best_solution_dejong1, best_value_dejong1, best_values_dejong1 = random_search(dejong1, 5, bounds_dejong, 5)
+print("best_solution_dejong1: ", best_solution_dejong1)
+print("best_value_dejong1: ", best_value_dejong1)
+print("best_values_dejong1: ", best_values_dejong1)
