@@ -51,12 +51,25 @@ def simulated_annealing(_test_function, _iterations, _bounds, _dimension, _temp_
     return NotImplemented
 
 
+# Statistics
+def calculate_statistics(best_values):
+    best_values = np.array(best_values)
+
+    return (
+        np.min(best_values),
+        np.max(best_values),
+        np.mean(best_values),
+        np.median(best_values),
+        np.std(best_values)
+    )
+
+
 # Configuration
 bounds_dejong = (-5, 5)
 bounds_schweffel = (-500, 500)
 
 # Implementations
 best_solution_dejong1, best_value_dejong1, best_values_dejong1 = random_search(dejong1, 5, bounds_dejong, 5)
-print("best_solution_dejong1: ", best_solution_dejong1)
-print("best_value_dejong1: ", best_value_dejong1)
-print("best_values_dejong1: ", best_values_dejong1)
+statistics_dejong1 = calculate_statistics(best_values_dejong1)
+
+pprint.pprint(statistics_dejong1)
