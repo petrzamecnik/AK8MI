@@ -21,8 +21,10 @@ def Schweffel(x):
 
 
 # Implementations
-test_arr = [1.2, -3.4, 2.1, -0.7, 4.3]
+test_arr = [1, 2]
 res1 = dejong1(test_arr)
 res2 = dejong2(test_arr)
+res3 = Schweffel(test_arr)
 print(res1)
 print(res2)
+print(res3)
