@@ -20,11 +20,28 @@ def Schweffel(x):
     return -np.sum(x * np.sin(np.sqrt(np.abs(x))))
 
 
+# Main Functions
+def random_search(test_function, iterations, bounds, dimension):
+    random_solution = np.random.uniform(*bounds, dimension)
+    _best_solution = random_solution
+    _best_value = np.inf
+
+    for i in range(iterations):
+        random_solution = np.random.uniform(*bounds, dimension)
+        value = test_function(random_solution)
+
+        if value < _best_value:
+            _best_value = value
+            _best_solution = random_solution
+
+    return _best_solution, _best_value
+
+
+# Configuration
+bounds_dejong = (-5, 5)
+bounds_schweffel = (-500, 500)
+
 # Implementations
-test_arr = [1, 2]
-res1 = dejong1(test_arr)
-res2 = dejong2(test_arr)
-res3 = Schweffel(test_arr)
-print(res1)
-print(res2)
-print(res3)
+best_solution, best_value = random_search(dejong1, 100, bounds_dejong, 5)
+print("best_solution:", best_solution)
+print("best_value:", best_value)
