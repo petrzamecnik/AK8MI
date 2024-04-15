@@ -66,6 +66,22 @@ def plot_average_convergence(func_name, d, algo_name, all_run_results):
     plt.close()
 
 
+def plot_all_convergences(func_name, d, algo_name, all_run_results):
+    max_iter = len(all_run_results[0])
+    num_runs = len(all_run_results)
+
+    plt.figure(figsize=(12, 6))
+    for i in range(num_runs):
+        plt.plot(range(max_iter), all_run_results[i], label=f'Run {i+1}')
+    plt.title(f'All Convergences - {algo_name} - {func_name} (D={d})')
+    plt.xlabel('Iterations')
+    plt.ylabel('Best Function Value')
+    plt.legend()
+    plt.tight_layout()
+    plt.show()
+    plt.close()
+
+
 # Config
 dimensions = (5, 10)
 max_fes = 10000
@@ -88,7 +104,8 @@ def experiment_dejong1():
         print(f"Dejong 1 (Dim={dimension})")
         print(compute_stats([run[-1] for run in run_results]))
 
-        plot_average_convergence('dejong1', dimension, 'Random Search', run_results)
+        # plot_average_convergence('dejong1', dimension, 'Random Search', run_results)
+        plot_all_convergences('dejong1', dimension, 'Random Search', run_results)
 
     return results
 
