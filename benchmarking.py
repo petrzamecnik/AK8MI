@@ -102,23 +102,52 @@ def experiment_dejong1():
             _, _, best_values = random_search(dejong1, bounds, max_fes)
             run_results.append(best_values)
         results.append(run_results)
-        print(f"Dejong 1 (Dim={dimension})")
+        print(f"Dejong 1 (Dimensions = {dimension})")
         print(compute_stats([run[-1] for run in run_results]))
 
-        # plot_average_convergence('dejong1', dimension, 'Random Search', run_results)
+        plot_average_convergence('dejong1', dimension, 'Random Search', run_results)
         plot_all_convergences('dejong1', dimension, 'Random Search', run_results)
 
     return results
 
 
 def experiment_dejong2():
-    pass
+    results = []
+    for dimension in dimensions:
+        bounds = np.tile(bounds_dejong, dimension)
+        run_results = []
+        for i in range(num_runs):
+            _, _, best_values = random_search(dejong2, bounds, max_fes)
+            run_results.append(best_values)
+        results.append(run_results)
+        print(f"Dejong 2 (Dimensions = {dimension})")
+        print(compute_stats([run[-1] for run in run_results]))
+
+        plot_average_convergence('dejong2', dimension, 'Random Search', run_results)
+        plot_all_convergences('dejong2', dimension, 'Random Search', run_results)
+
+    return results
 
 
 def experiment_schweffel():
-    pass
+    results = []
+    for dimension in dimensions:
+        bounds = np.tile(bounds_dejong, dimension)
+        run_results = []
+        for i in range(num_runs):
+            _, _, best_values = random_search(schweffel, bounds, max_fes)
+            run_results.append(best_values)
+        results.append(run_results)
+        print(f"Schweffel (Dimensions = {dimension})")
+        print(compute_stats([run[-1] for run in run_results]))
+
+        plot_average_convergence('schweffel', dimension, 'Random Search', run_results)
+        plot_all_convergences('schweffel', dimension, 'Random Search', run_results)
+
+    return results
 
 
+# Runs
 experiment_dejong1()
 experiment_dejong2()
 experiment_schweffel()
