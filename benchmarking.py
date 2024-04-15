@@ -51,33 +51,34 @@ def random_search(function, bounds, max_iter):
 
 
 # Plots
-def plot_average_convergence(func_name, d, algo_name, all_run_results):
+def plot_average_convergence(func_name, dimensions, algo_name, all_run_results):
     max_iter = len(all_run_results[0])
     average_best_values = [np.mean([run_results[i] for run_results in all_run_results]) for i in range(max_iter)]
 
     plt.figure(figsize=(12, 4))
     plt.plot(range(max_iter), average_best_values)
-    plt.title(f'Average Best Solution - {algo_name} - {func_name} (D={d})')
+    plt.title(f'Average Best Solution - {algo_name} - {func_name} (Dimensions = {dimensions})')
     plt.xlabel('Iterations')
     plt.ylabel('Average Best Function Value')
     plt.tight_layout()
-    # plt.savefig(f'{algo_name}_{func_name}_D{d}.png', dpi=300, bbox_inches='tight')
+
     plt.show()
     plt.close()
 
 
-def plot_all_convergences(func_name, d, algo_name, all_run_results):
+def plot_all_convergences(func_name, dimensions, algo_name, all_run_results):
     max_iter = len(all_run_results[0])
     num_runs = len(all_run_results)
 
     plt.figure(figsize=(12, 6))
     for i in range(num_runs):
-        plt.plot(range(max_iter), all_run_results[i], label=f'Run {i+1}')
-    plt.title(f'All Convergences - {algo_name} - {func_name} (D={d})')
+        plt.plot(range(max_iter), all_run_results[i], label=f'Run {i + 1}')
+
+    plt.title(f'All Convergences - {algo_name} - {func_name} (Dimensions = {dimensions})')
     plt.xlabel('Iterations')
     plt.ylabel('Best Function Value')
-    plt.legend()
     plt.tight_layout()
+
     plt.show()
     plt.close()
 
