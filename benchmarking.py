@@ -23,7 +23,7 @@ def Schweffel(x):
 
 
 # Main Functions
-def random_search(test_function, iterations, bounds, dimension):
+def random_search(test_function, max_fes, bounds, dimension):
     def generate_random_solution(_bounds, _dimension):
         while True:
             solution = np.random.uniform(*_bounds, _dimension)
@@ -34,18 +34,19 @@ def random_search(test_function, iterations, bounds, dimension):
     best_solution = random_solution
     best_value = test_function(best_solution)
     best_values = [best_value]
+    num_fes = 1
 
-    for i in range(iterations - 1):
+    while num_fes < max_fes:
         random_solution = generate_random_solution(bounds, dimension)
         value = test_function(random_solution)
         best_values.append(value)
+        num_fes += 1
 
         if value < best_value:
             best_value = value
             best_solution = random_solution
 
     return best_solution, best_value, best_values
-
 
 def simulated_annealing(_test_function, _iterations, _bounds, _dimension, _temp_start, _temp_end):
     return NotImplemented
