@@ -93,4 +93,14 @@ def experiment_dejong1():
     return results
 
 
+def experiment_dejong2():
+    pass
+
+
+def experiment_schweffel():
+    pass
+
+
 experiment_dejong1()
+experiment_dejong2()
+experiment_schweffel()
