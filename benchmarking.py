@@ -64,12 +64,52 @@ def calculate_statistics(best_values):
     )
 
 
+def plot_all_runs(title, best_values):
+    plt.figure()
+    # best_values_sorted = np.sort(best_values)
+
+    for best_value in best_values:
+        plt.plot(best_value)
+
+    plt.title(title)
+    plt.xlabel('Iterations')
+    plt.ylabel('Best Value')
+    plt.show()
+
+
+def plot_average_convergence(title, best_values):
+    average_best_values = np.mean(best_values, axis=0)
+    average_best_values_sorted = np.sort(average_best_values)[::-1]
+
+    plt.figure()
+    plt.plot(average_best_values_sorted)
+    plt.title(title)
+    plt.xlabel('Iterations')
+    plt.ylabel('Average Best Value')
+    plt.show()
+
+
 # Configuration
 bounds_dejong = (-5, 5)
 bounds_schweffel = (-500, 500)
+iterations = 100
+
 
 # Implementations
-best_solution_dejong1, best_value_dejong1, best_values_dejong1 = random_search(dejong1, 5, bounds_dejong, 5)
-statistics_dejong1 = calculate_statistics(best_values_dejong1)
+def experiment_dejong1():
+    num_runs = 30
+    all_runs = []
 
-pprint.pprint(statistics_dejong1)
+    for i in range(num_runs):
+        _, _, best_values = random_search(dejong1, iterations, bounds_dejong, 5)
+        all_runs.append(best_values)
+
+    min_val, max_val, mean_val, median_val, std_val = calculate_statistics(best_values)
+    print(
+        f"Minimum: {min_val}, Maximum: {max_val}, Mean: {mean_val}, Median: {median_val}, Standard Deviation: {std_val}")
+
+    plot_all_runs("All Runs Dejong1", all_runs)
+    plot_average_convergence("Average Convergence", all_runs)
+
+
+experiment_dejong1()
