@@ -127,6 +127,28 @@ def plot_all_convergences(func_name, dimensions, algo_name, all_run_results):
     plt.close()
 
 
+def plot_comparison(func_name, dimensions, random_results, simulated_annealing_results):
+    max_iter = len(random_results[0][0])
+    num_dimensions = len(dimensions)
+
+    for dim_idx in range(num_dimensions):
+        dimension = dimensions[dim_idx]
+        random_avg_values = [np.mean([run[i] for run in random_results[dim_idx]]) for i in range(max_iter)]
+        sa_avg_values = [np.mean([run[i] for run in simulated_annealing_results[dim_idx]]) for i in range(max_iter)]
+
+        plt.figure(figsize=(12, 6))
+        plt.plot(range(max_iter), random_avg_values, label="Random Search")
+        plt.plot(range(max_iter), sa_avg_values, label="Simulated Annealing")
+
+        plt.title(f"Comparison of Average Convergence - {func_name} (Dimension = {dimension})")
+        plt.xlabel("Iterations")
+        plt.ylabel("Average Best Function Value")
+        plt.legend()
+        plt.tight_layout()
+
+        plt.show()
+        plt.close()
+
 # Config
 dimensions = (5, 10)
 max_fes = 10000
