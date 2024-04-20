@@ -222,7 +222,7 @@ def experiment_simulated_annealing_dejong2():
         run_results = []
 
         for i in range(num_runs):
-            _, _, best_values = simulated_annealing(dejong1, bounds, max_fes, min_temp, max_temp, cooling_rate)
+            _, _, best_values = simulated_annealing(dejong2, bounds, max_fes, min_temp, max_temp, cooling_rate)
             run_results.append(best_values)
 
         results.append(run_results)
@@ -235,7 +235,24 @@ def experiment_simulated_annealing_dejong2():
     return results
 
 
+def experiment_simulated_annealing_schweffel():
+    results = []
+    for dimension in dimensions:
+        bounds = np.tile(bounds_schweffel, dimension)
+        run_results = []
 
+        for i in range(num_runs):
+            _, _, best_values = simulated_annealing(schweffel, bounds, max_fes, min_temp, max_temp, cooling_rate)
+            run_results.append(best_values)
+
+        results.append(run_results)
+        print(f"Simulated Annealing schweffel (Dimensions = {dimension})")
+        print(compute_stats([run[-1] for run in run_results]))
+
+        plot_average_convergence("schweffel", dimension, 'Simulated Annealing', run_results)
+        plot_all_convergences("schweffel", dimension, 'Simulated Annealing', run_results)
+
+    return results
 
 
 # Runs
@@ -243,3 +260,5 @@ def experiment_simulated_annealing_dejong2():
 # experiment_random_search_dejong2()
 # experiment_random_search_schweffel()
 experiment_simulated_annealing_dejong1()
+experiment_simulated_annealing_dejong2()
+experiment_simulated_annealing_schweffel()
