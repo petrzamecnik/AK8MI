@@ -127,27 +127,37 @@ def plot_all_convergences(func_name, dimensions, algo_name, all_run_results):
     plt.close()
 
 
-def plot_comparison(func_name, dimensions, random_results, simulated_annealing_results):
-    max_iter = len(random_results[0][0])
+def plot_comparison(func_name, dimensions, rs_results, sa_results):
     num_dimensions = len(dimensions)
+    plt.figure(figsize=(12, 4))
 
     for dim_idx in range(num_dimensions):
         dimension = dimensions[dim_idx]
-        random_avg_values = [np.mean([run[i] for run in random_results[dim_idx]]) for i in range(max_iter)]
-        sa_avg_values = [np.mean([run[i] for run in simulated_annealing_results[dim_idx]]) for i in range(max_iter)]
+        rs_runs = rs_results[dim_idx]
+        sa_runs = sa_results[dim_idx]
 
-        plt.figure(figsize=(12, 6))
-        plt.plot(range(max_iter), random_avg_values, label="Random Search")
-        plt.plot(range(max_iter), sa_avg_values, label="Simulated Annealing")
+        max_iter = max(max(len(run) for run in rs_runs), max(len(run) for run in sa_runs))
 
-        plt.title(f"Comparison of Average Convergence - {func_name} (Dimension = {dimension})")
-        plt.xlabel("Iterations")
-        plt.ylabel("Average Best Function Value")
+        rs_avg_convergence = [np.mean(
+            [run_best_values[i] if i < len(run_best_values) else run_best_values[-1] for run_best_values in rs_runs])
+            for i in range(max_iter)]
+
+        sa_avg_convergence = [np.mean(
+            [run_best_values[i] if i < len(run_best_values) else run_best_values[-1] for run_best_values in sa_runs])
+            for i in range(max_iter)]
+
+        plt.plot(range(max_iter), rs_avg_convergence, label='Random Search')
+        plt.plot(range(max_iter), sa_avg_convergence, label='Simulated Annealing')
+
+        plt.title(f'Comparison of Average Convergence - {func_name} (D={dimension})')
+        plt.xlabel('Iterations')
+        plt.ylabel('Average Best Function Value')
         plt.legend()
-        plt.tight_layout()
 
+        plt.tight_layout()
         plt.show()
         plt.close()
+
 
 # Config
 dimensions = (5, 10)
@@ -278,9 +288,17 @@ def experiment_simulated_annealing_schweffel():
 
 
 # Runs
-# experiment_random_search_dejong1()
-# experiment_random_search_dejong2()
-# experiment_random_search_schweffel()
-experiment_simulated_annealing_dejong1()
-experiment_simulated_annealing_dejong2()
-experiment_simulated_annealing_schweffel()
+# Random Search
+random_dejong1_results = experiment_random_search_dejong1()
+# random_dejong2_results = experiment_random_search_dejong2()
+# random_schweffel_results = experiment_random_search_schweffel()
+
+# Simulated Annealing
+sa_dejong1_results = experiment_simulated_annealing_dejong1()
+# sa_dejong2_results = experiment_simulated_annealing_dejong2()
+# sa_schweffel_results = experiment_simulated_annealing_schweffel()
+
+# Comparisons
+plot_comparison("dejong1", dimensions, random_dejong1_results, sa_dejong1_results)
+# plot_comparison("dejong2", dimensions, random_dejong2_results, sa_dejong2_results)
+# plot_comparison("schweffel", dimensions, random_schweffel_results, sa_schweffel_results)
