@@ -49,11 +49,11 @@ def random_search(function, bounds, max_iter):
     return best_solution, best_value, best_values
 
 
-def simulated_annealing(function, bounds, max_iter, initial_temp, min_temp, max_temp, cooling_rate):
+def simulated_annealing(function, bounds, max_iter, min_temp, max_temp, cooling_rate):
     def generate_neighbor(current_solution, bounds):
         neighbor = current_solution.copy()
-        perturb_index = np.random.randint(len(bounds))
-        neighbor[perturb_index] = np.random.uniform(bounds[perturb_index][0], bounds[perturb_index][1])
+        perturb_index = np.random.randint(len(neighbor))
+        neighbor[perturb_index] = np.random.uniform(bounds[0], bounds[1])
         return neighbor
 
     def evaluate_solution(current_value, neighbor_value, temperature):
@@ -70,7 +70,28 @@ def simulated_annealing(function, bounds, max_iter, initial_temp, min_temp, max_
     current_value = function(current_solution)
     best_solution = None
     best_value = current_value
-    temperature = initial_temp
+    best_values = []
+    temperature = max_temp
+
+    for i in range(max_iter):
+        neighbor = generate_neighbor(current_solution, bounds)
+        neighbor_value = function(neighbor)
+
+        if evaluate_solution(current_value, neighbor_value, temperature):
+            current_solution = neighbor
+            current_value = neighbor_value
+
+        if neighbor_value < best_value:
+            best_solution = neighbor
+            best_value = neighbor_value
+
+        best_values.append(best_value)
+        temperature = update_temp(temperature, cooling_rate)
+
+        if temperature < min_temp:
+            break
+
+    return best_solution, best_value, best_values
 
 
 # Plots
@@ -115,8 +136,8 @@ bounds_dejong = np.array([-5, 5])
 bounds_schweffel = np.array([-500, 500])
 
 max_temp = 1000
-min_temp = 1
-cooling_rate = 0.98
+min_temp = 0.1
+cooling_rate = 0.99
 
 
 # Experiments
@@ -173,7 +194,29 @@ def experiment_random_search_schweffel():
 
     return results
 
+
+def experiment_simulated_annealing_dejong1():
+    results = []
+    for dimension in dimensions:
+        bounds = np.tile(bounds_dejong, dimension)
+        run_results = []
+
+        for i in range(num_runs):
+            _, _, best_values = simulated_annealing(dejong1, bounds, max_fes, min_temp, max_temp, cooling_rate)
+            run_results.append(best_values)
+
+        results.append(run_results)
+        print(f"Simulated Annealing Dejong 1 (Dimensions = {dimension})")
+        print(compute_stats([run[-1] for run in run_results]))
+
+        plot_average_convergence("dejong 1", dimension, 'Simulated Annealing', run_results)
+        plot_all_convergences("dejong 1", dimension, 'Simulated Annealing', run_results)
+
+    return results
+
+
 # Runs
 # experiment_random_search_dejong1()
 # experiment_random_search_dejong2()
 # experiment_random_search_schweffel()
+experiment_simulated_annealing_dejong1()
