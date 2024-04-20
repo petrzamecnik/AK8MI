@@ -290,15 +290,15 @@ def experiment_simulated_annealing_schweffel():
 # Runs
 # Random Search
 random_dejong1_results = experiment_random_search_dejong1()
-# random_dejong2_results = experiment_random_search_dejong2()
-# random_schweffel_results = experiment_random_search_schweffel()
+random_dejong2_results = experiment_random_search_dejong2()
+random_schweffel_results = experiment_random_search_schweffel()
 
 # Simulated Annealing
 sa_dejong1_results = experiment_simulated_annealing_dejong1()
-# sa_dejong2_results = experiment_simulated_annealing_dejong2()
-# sa_schweffel_results = experiment_simulated_annealing_schweffel()
+sa_dejong2_results = experiment_simulated_annealing_dejong2()
+sa_schweffel_results = experiment_simulated_annealing_schweffel()
 
 # Comparisons
 plot_comparison("dejong1", dimensions, random_dejong1_results, sa_dejong1_results)
-# plot_comparison("dejong2", dimensions, random_dejong2_results, sa_dejong2_results)
-# plot_comparison("schweffel", dimensions, random_schweffel_results, sa_schweffel_results)
+plot_comparison("dejong2", dimensions, random_dejong2_results, sa_dejong2_results)
+plot_comparison("schweffel", dimensions, random_schweffel_results, sa_schweffel_results)
