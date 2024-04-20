@@ -215,6 +215,29 @@ def experiment_simulated_annealing_dejong1():
     return results
 
 
+def experiment_simulated_annealing_dejong2():
+    results = []
+    for dimension in dimensions:
+        bounds = np.tile(bounds_dejong, dimension)
+        run_results = []
+
+        for i in range(num_runs):
+            _, _, best_values = simulated_annealing(dejong1, bounds, max_fes, min_temp, max_temp, cooling_rate)
+            run_results.append(best_values)
+
+        results.append(run_results)
+        print(f"Simulated Annealing Dejong 2 (Dimensions = {dimension})")
+        print(compute_stats([run[-1] for run in run_results]))
+
+        plot_average_convergence("dejong 2", dimension, 'Simulated Annealing', run_results)
+        plot_all_convergences("dejong 2", dimension, 'Simulated Annealing', run_results)
+
+    return results
+
+
+
+
+
 # Runs
 # experiment_random_search_dejong1()
 # experiment_random_search_dejong2()
