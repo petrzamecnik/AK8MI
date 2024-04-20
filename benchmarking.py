@@ -101,7 +101,7 @@ bounds_schweffel = np.array([-500, 500])
 
 
 # Experiments
-def experiment_dejong1():
+def experiment_random_search_dejong1():
     results = []
     for dimension in dimensions:
         bounds = np.tile(bounds_dejong, dimension)
@@ -119,7 +119,7 @@ def experiment_dejong1():
     return results
 
 
-def experiment_dejong2():
+def experiment_random_search_dejong2():
     results = []
     for dimension in dimensions:
         bounds = np.tile(bounds_dejong, dimension)
@@ -137,7 +137,7 @@ def experiment_dejong2():
     return results
 
 
-def experiment_schweffel():
+def experiment_random_search_schweffel():
     results = []
     for dimension in dimensions:
         bounds = np.tile(bounds_dejong, dimension)
@@ -156,6 +156,6 @@ def experiment_schweffel():
 
 
 # Runs
-# experiment_dejong1()
-# experiment_dejong2()
-# experiment_schweffel()
+experiment_random_search_dejong1()
+experiment_random_search_dejong2()
+experiment_random_search_schweffel()
