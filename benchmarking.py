@@ -180,7 +180,7 @@ def experiment_random_search_dejong2():
 def experiment_random_search_schweffel():
     results = []
     for dimension in dimensions:
-        bounds = np.tile(bounds_dejong, dimension)
+        bounds = np.tile(bounds_schweffel, dimension)
         run_results = []
         for i in range(num_runs):
             _, _, best_values = random_search(schweffel, bounds, max_fes)
