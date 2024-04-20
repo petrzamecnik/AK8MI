@@ -49,13 +49,28 @@ def random_search(function, bounds, max_iter):
     return best_solution, best_value, best_values
 
 
-def simulated_annealing(function, bounds, max_iter, initial_temp, cooling_rate):
+def simulated_annealing(function, bounds, max_iter, initial_temp, min_temp, max_temp, cooling_rate):
+    def generate_neighbor(current_solution, bounds):
+        neighbor = current_solution.copy()
+        perturb_index = np.random.randint(len(bounds))
+        neighbor[perturb_index] = np.random.uniform(bounds[perturb_index][0], bounds[perturb_index][1])
+        return neighbor
+
+    def evaluate_solution(current_value, neighbor_value, temperature):
+        if neighbor_value < current_value:
+            return True
+        else:
+            acceptance_probability = np.exp((current_value - neighbor_value) / temperature)
+            return np.random.uniform() < acceptance_probability
+
+    def update_temp(temperature, cooling_rate):
+        return temperature * cooling_rate
+
     current_solution = np.random.uniform(bounds[0], bounds[1], size=len(bounds))
     current_value = function(current_solution)
     best_solution = None
     best_value = current_value
     temperature = initial_temp
-
 
 
 # Plots
@@ -98,6 +113,10 @@ num_runs = 30
 
 bounds_dejong = np.array([-5, 5])
 bounds_schweffel = np.array([-500, 500])
+
+max_temp = 1000
+min_temp = 1
+cooling_rate = 0.98
 
 
 # Experiments
@@ -154,8 +173,7 @@ def experiment_random_search_schweffel():
 
     return results
 
-
 # Runs
-experiment_random_search_dejong1()
-experiment_random_search_dejong2()
-experiment_random_search_schweffel()
+# experiment_random_search_dejong1()
+# experiment_random_search_dejong2()
+# experiment_random_search_schweffel()
