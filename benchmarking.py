@@ -10,7 +10,6 @@ def dejong1(x):
 
 def dejong2(x):
     # f(x⃗) = Σ (x_i^2 - 10 * cos(2π * x_i) + 10) pro i = 1, 2, ..., n
-
     x = np.array(x)
     return np.sum(x ** 2 - 10 * np.cos(2 * np.pi * x) + 10)
 
@@ -48,6 +47,15 @@ def random_search(function, bounds, max_iter):
         best_values.append(best_value)
 
     return best_solution, best_value, best_values
+
+
+def simulated_annealing(function, bounds, max_iter, initial_temp, cooling_rate):
+    current_solution = np.random.uniform(bounds[0], bounds[1], size=len(bounds))
+    current_value = function(current_solution)
+    best_solution = None
+    best_value = current_value
+    temperature = initial_temp
+
 
 
 # Plots
@@ -148,6 +156,6 @@ def experiment_schweffel():
 
 
 # Runs
-experiment_dejong1()
-experiment_dejong2()
-experiment_schweffel()
+# experiment_dejong1()
+# experiment_dejong2()
+# experiment_schweffel()
