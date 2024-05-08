@@ -1,5 +1,6 @@
 import numpy as np
 from itertools import product
+from multiprocessing import Pool, cpu_count
 import random
 import time
 import sys
@@ -37,15 +38,18 @@ def evaluate_solution(solution, weights, prices, capacity):
     return total_price
 
 
+def worker(args):
+    solution, weights, prices, capacity = args
+    return evaluate_solution(solution, weights, prices, capacity), solution
+
 def brute_force(weights, prices, capacity):
     start_time = time.time()
-    best_solution = None
-    best_price = 0
-    for solution in product(*[range(weights.shape[1]) for _ in range(weights.shape[0])]):
-        price = evaluate_solution(solution, weights, prices, capacity)
-        if price > best_price:
-            best_price = price
-            best_solution = solution
+    solutions = list(product(*[range(weights.shape[1]) for _ in range(weights.shape[0])]))
+
+    with Pool(processes=cpu_count()) as pool:
+        results = pool.map(worker, [(solution, weights, prices, capacity) for solution in solutions])
+
+    best_price, best_solution = max(results, key=lambda x: x[0])
     end_time = time.time()
     elapsed_time = end_time - start_time
     return best_solution, best_price, elapsed_time
@@ -94,44 +98,45 @@ def simulated_annealing(weights, prices, capacity, max_iterations, initial_temp,
     return best_solution, best_price, elapsed_time
 
 
-# Run
-weights, prices = generate_mckp_instance(num_classes, num_items_per_class)
-capacity = get_knapsack_capacity(num_classes)
-
-# Hrubá síla
-brute_force_solution, brute_force_price, brute_force_time = brute_force(weights, prices, capacity)
-print("Brute Force Solution:", brute_force_solution)
-print("Brute Force Price:", brute_force_price)
-print(f"Brute Force Time: {brute_force_time:.2f} s")
-
-# Simulované žíhání
-sa_solution, sa_price, sa_time = simulated_annealing(weights, prices, capacity, max_iterations=10000, initial_temp=1000,
-                                                     cooling_rate=0.99)
-print("Simulated Annealing Solution:", sa_solution)
-print("Simulated Annealing Price:", sa_price)
-print(f"Simulated Annealing Time: {sa_time:.2f} s")
-
-# Hledání maximálního počtu tříd řešitelného do 1 hodiny
-MAX_TIME = 3600  # 1 hodina v sekundách
-
-print("\nHledání maximálního počtu tříd řešitelného do 1 hodiny...")
-
-num_classes = 3
-while True:
+if __name__ == '__main__':
+    # Run
     weights, prices = generate_mckp_instance(num_classes, num_items_per_class)
     capacity = get_knapsack_capacity(num_classes)
 
-    print(f"\nPočet tříd: {num_classes}")
-
+    # Hrubá síla
     brute_force_solution, brute_force_price, brute_force_time = brute_force(weights, prices, capacity)
-    print(f"Brute Force: Cena = {brute_force_price}, Čas = {brute_force_time:.2f} s")
+    print("Brute Force Solution:", brute_force_solution)
+    print("Brute Force Price:", brute_force_price)
+    print(f"Brute Force Time: {brute_force_time:.2f} s")
 
-    if brute_force_time > MAX_TIME:
-        print(f"Maximální počet tříd řešitelných do 1 hodiny je {num_classes - 1}")
-        sys.exit(0)
+    # Simulované žíhání
+    sa_solution, sa_price, sa_time = simulated_annealing(weights, prices, capacity, max_iterations=10000, initial_temp=1000,
+                                                         cooling_rate=0.99)
+    print("Simulated Annealing Solution:", sa_solution)
+    print("Simulated Annealing Price:", sa_price)
+    print(f"Simulated Annealing Time: {sa_time:.2f} s")
 
-    sa_solution, sa_price, sa_time = simulated_annealing(weights, prices, capacity, max_iterations=10000,
-                                                         initial_temp=1000, cooling_rate=0.99)
-    print(f"Simulated Annealing: Cena = {sa_price}, Čas = {sa_time:.2f} s")
+    # Hledání maximálního počtu tříd řešitelného do 1 hodiny
+    MAX_TIME = 3600  # 1 hodina v sekundách
 
-    num_classes += 1
+    print("\nHledání maximálního počtu tříd řešitelného do 1 hodiny...")
+
+    num_classes = 3
+    while True:
+        weights, prices = generate_mckp_instance(num_classes, num_items_per_class)
+        capacity = get_knapsack_capacity(num_classes)
+
+        print(f"\nPočet tříd: {num_classes}")
+
+        brute_force_solution, brute_force_price, brute_force_time = brute_force(weights, prices, capacity)
+        print(f"Brute Force: Cena = {brute_force_price}, Čas = {brute_force_time:.2f} s")
+
+        if brute_force_time > MAX_TIME:
+            print(f"Maximální počet tříd řešitelných do 1 hodiny je {num_classes - 1}")
+            sys.exit(0)
+
+        sa_solution, sa_price, sa_time = simulated_annealing(weights, prices, capacity, max_iterations=10000,
+                                                             initial_temp=1000, cooling_rate=0.99)
+        print(f"Simulated Annealing: Cena = {sa_price}, Čas = {sa_time:.2f} s")
+
+        num_classes += 1
