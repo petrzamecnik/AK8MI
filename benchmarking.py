@@ -63,7 +63,7 @@ def simulated_annealing(function, bounds, max_iter, min_temp, max_temp, cooling_
             acceptance_probability = np.exp((current_value - neighbor_value) / temperature)
             return np.random.uniform() < acceptance_probability
 
-    def update_temp(temperature, cooling_rate):
+    def update_temp(temperature, cooling_te):
         return temperature * cooling_rate
 
     current_solution = np.random.uniform(bounds[0], bounds[1], size=len(bounds))

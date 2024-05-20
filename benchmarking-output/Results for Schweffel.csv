@@ -1,0 +1,5 @@
+Dimenze,Algoritmus,Min,Max,Mean,Median,Standard Deviations
+5,Random Search,-2739.208,-2063.942,-2307.909,-2276.662,161.464
+5,Simulated Annealing,-4146.705,-3962.612,-4054.286,-4046.362,47.147
+10,Random Search,-3951.652,-2955.423,-3262.691,-3191.102,247.58
+10,Simulated Annealing,-8058.755,-7211.893,-7715.547,-7698.142,194.071
